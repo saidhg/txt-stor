@@ -1,0 +1,125 @@
+الدفع عبر متجر
+
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر بيع ملفات TXT</title>
+    <style>
+        /* نفس التنسيق السابق */
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>متجر بيع ملفات TXT</h1>
+    </header>
+
+    <section class="products">
+        <div class="product">
+            <h2>ملف 1</h2>
+            <p>وصف الملف الأول (مثال: ملف يحتوي على بيانات أو تعليمات).</p>
+            <p class="price">50 ريال</p>
+            <button class="buy-btn" onclick="startPayment('file1.txt')">شراء الملف</button>
+        </div>
+
+        <div class="product">
+            <h2>ملف 2</h2>
+            <p>وصف الملف الثاني.</p>
+            <p class="price">75 ريال</p>
+            <button class="buy-btn" onclick="startPayment('file2.txt')">شراء الملف</button>
+        </div>
+
+        <div class="product">
+            <h2>ملف 3</h2>
+            <p>وصف الملف الثالث.</p>
+            <p class="price">100 ريال</p>
+            <button class="buy-btn" onclick="startPayment('file3.txt')">شراء الملف</button>
+        </div>
+    </section>
+
+    <!-- صفحة الدفع -->
+    <section class="payment-section" id="paymentSection" style="display: none;">
+        <h2>ادفع للحصول على الملف</h2>
+        <p id="paymentAmount"></p>
+        <button id="payButton">الدفع الآن</button>
+    </section>
+
+    <!-- صفحة إدخال الكود -->
+    <section class="download-section" id="downloadSection" style="display: none;">
+        <h2>أدخل الكود للحصول على الملف</h2>
+        <input type="text" id="codeInput" placeholder="أدخل كود التحميل">
+        <button id="submitCode">إرسال</button>
+    </section>
+
+    <footer>
+        <p>حقوق الطبع والنشر &copy; 2025 متجر بيع ملفات TXT</p>
+    </footer>
+
+    <script>
+        // حفظ الملف المحدد
+        let selectedFile = '';
+
+        // دالة بدء عملية الدفع
+        function startPayment(fileName) {
+            selectedFile = fileName;
+            let filePrice = '';
+            switch (fileName) {
+                case 'file1.txt':
+                    filePrice = '50 ريال';
+                    break;
+                case 'file2.txt':
+                    filePrice = '75 ريال';
+                    break;
+                case 'file3.txt':
+                    filePrice = '100 ريال';
+                    break;
+                default:
+                    filePrice = '0 ريال';
+                    break;
+            }
+
+            // إظهار صفحة الدفع
+            document.getElementById('paymentAmount').textContent = 'المبلغ المطلوب: ' + filePrice;
+            document.getElementById('paymentSection').style.display = 'block';
+        }
+
+        // دالة الدفع
+        document.getElementById('payButton').onclick = function() {
+            // توليد كود فريد
+            const generatedCode = 'CODE' + Math.floor(Math.random() * 1000000);
+            alert('تم الدفع بنجاح! كود التحميل الخاص بك هو: ' + generatedCode);
+
+            // إخفاء صفحة الدفع وإظهار صفحة إدخال الكود
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('downloadSection').style.display = 'block';
+
+            // حفظ الكود الفريد في localStorage
+            localStorage.setItem('downloadCode', generatedCode);
+        };
+
+        // دالة التحقق من الكود
+        document.getElementById('submitCode').onclick = function() {
+            const enteredCode = document.getElementById('codeInput').value;
+            const validCode = localStorage.getItem('downloadCode');
+
+            if (!validCode) {
+                alert('لم تقم بالدفع بعد!');
+                return;
+            }
+
+            if (enteredCode === validCode) {
+                alert('الكود صحيح! يمكنك تحميل الملف.');
+                // تعطيل الكود بعد تحميله
+                localStorage.removeItem('downloadCode'); // مسح الكود بعد استخدامه
+                window.location.href = 'https://your-username.github.io/your-repository-name/files/' + selectedFile;  // رابط التحميل للملف
+            } else {
+                alert('الكود غير صحيح أو تم استخدامه مسبقًا. حاول مرة أخرى.');
+            }
+        };
+    </script>
+
+</body>
+</html>
